@@ -464,7 +464,7 @@ const Minesweeper = () => {
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR", {
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -476,9 +476,9 @@ const Minesweeper = () => {
   // Format difficulty for display
   const formatDifficulty = (diff: Difficulty) => {
     const difficultyMap = {
-      beginner: "초급",
-      intermediate: "중급",
-      expert: "고급",
+      beginner: "Beginner",
+      intermediate: "Intermediate",
+      expert: "Expert",
     };
     return difficultyMap[diff];
   };
@@ -512,7 +512,7 @@ const Minesweeper = () => {
 
   // Clear all scores
   const clearScores = () => {
-    if (window.confirm("모든 기록을 삭제하시겠습니까?")) {
+    if (window.confirm("Are you sure you want to delete all records?")) {
       setScores([]);
     }
   };
@@ -527,43 +527,43 @@ const Minesweeper = () => {
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value as Difficulty)}
         >
-          <option value="beginner">초급</option>
-          <option value="intermediate">중급</option>
-          <option value="expert">고급</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="expert">Expert</option>
         </select>
         
         <button
           className="px-3 py-2 bg-blue-500 text-white rounded flex items-center gap-1"
           onClick={initializeBoard}
         >
-          <RefreshCw size={16} /> 새 게임
+          <RefreshCw size={16} /> New Game
         </button>
         
         <button
           className="px-3 py-2 bg-green-500 text-white rounded flex items-center gap-1"
           onClick={() => setShowScoreboard(!showScoreboard)}
         >
-          <Award size={16} /> {showScoreboard ? "게임으로 돌아가기" : "기록 보기"}
+          <Award size={16} /> {showScoreboard ? "Back to Game" : "View Records"}
         </button>
       </div>
       
       {showScoreboard ? (
         <div className="w-full max-w-2xl">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">개인 기록</h2>
+            <h2 className="text-xl font-bold">Personal Records</h2>
             {scores.length > 0 && (
               <button
                 className="px-2 py-1 bg-red-500 text-white rounded text-sm"
                 onClick={clearScores}
               >
-                기록 삭제
+                Delete Records
               </button>
             )}
           </div>
           
           {scores.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              아직 기록이 없습니다. 게임을 클리어하면 기록이 저장됩니다.
+              No records yet. Records will be saved when you complete a game.
             </div>
           ) : (
             <div className="border rounded overflow-hidden">
@@ -576,7 +576,7 @@ const Minesweeper = () => {
                     >
                       <div className="flex items-center gap-1">
                         <Calendar size={14} />
-                        날짜
+                        Date
                         {sortField === "date" && (
                           <ArrowUpDown
                             size={14}
@@ -593,7 +593,7 @@ const Minesweeper = () => {
                     >
                       <div className="flex items-center gap-1">
                         <Clock size={14} />
-                        시간
+                        Time
                         {sortField === "time" && (
                           <ArrowUpDown
                             size={14}
@@ -610,7 +610,7 @@ const Minesweeper = () => {
                     >
                       <div className="flex items-center gap-1">
                         <Award size={14} />
-                        난이도
+                        Difficulty
                         {sortField === "difficulty" && (
                           <ArrowUpDown
                             size={14}
@@ -627,7 +627,7 @@ const Minesweeper = () => {
                   {sortedScores.map((score) => (
                     <tr key={score.id} className="border-t hover:bg-gray-50">
                       <td className="px-4 py-2">{formatDate(score.date)}</td>
-                      <td className="px-4 py-2">{score.time.toFixed(2)}초</td>
+                      <td className="px-4 py-2">{score.time.toFixed(2)}s</td>
                       <td className="px-4 py-2">{formatDifficulty(score.difficulty)}</td>
                     </tr>
                   ))}
@@ -644,7 +644,7 @@ const Minesweeper = () => {
               <Flag size={16} className="text-red-600" />
               <span>{flagCount} / {difficultySettings[difficulty].mines}</span>
             </div>
-            <div>시간: {elapsedTimeMs.toFixed(2)}초</div>
+            <div>Time: {elapsedTimeMs.toFixed(2)}s</div>
           </div>
           
           {/* Game board */}
@@ -698,24 +698,24 @@ const Minesweeper = () => {
           {/* Game status */}
           {gameOver && (
             <div className="mt-4 text-xl text-red-600 font-bold">
-              게임 오버! 지뢰를 밟았습니다.
+              Game Over! You hit a mine.
             </div>
           )}
           {gameWon && (
             <div className="mt-4 text-xl text-green-600 font-bold">
-              축하합니다! 모든 지뢰를 찾았습니다! (시간: {elapsedTimeMs.toFixed(2)}초)
+              Congratulations! You found all mines! (Time: {elapsedTimeMs.toFixed(2)}s)
             </div>
           )}
           
           {/* Game instructions */}
           <div className="mt-6 text-sm text-gray-600 max-w-md">
-            <h3 className="font-bold mb-1">게임 방법:</h3>
+            <h3 className="font-bold mb-1">How to Play:</h3>
             <ul className="list-disc pl-5">
-              <li>왼쪽 클릭: 셀 열기</li>
-              <li>오른쪽 클릭: 셀 표시 변경 (기본 → 깃발 → 물음표 → 기본)</li>
-              <li>숫자 클릭: 주변에 깃발이 숫자만큼 있으면 나머지 셀 자동 열기</li>
-              <li>숫자 위에 마우스를 올리면 영향을 받는 셀이 노란색으로 표시됩니다</li>
-              <li>숫자 클릭 시 깃발이 부족하면 주변 셀이 빨간색으로 깜빡입니다</li>
+              <li>Left click: Reveal a cell</li>
+              <li>Right click: Cycle marking (None → Flag → Question → None)</li>
+              <li>Click on a number: Reveal adjacent cells if enough flags are placed</li>
+              <li>Hover over a number: Highlights affected cells in yellow</li>
+              <li>If flags are insufficient when clicking a number, adjacent cells flash red</li>
             </ul>
           </div>
         </>
